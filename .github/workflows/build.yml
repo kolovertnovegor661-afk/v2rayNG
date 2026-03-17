@@ -9,8 +9,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: 'recursive'
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -18,10 +16,16 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Download libv2ray
+        run: |
+          mkdir -p V2rayNG/app/libs
+          curl -L -o V2rayNG/app/libs/libv2ray.aar \
+            "https://github.com/2dust/AndroidLibV2rayLite/releases/latest/download/libv2ray.aar"
+
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Grant execute permission
+      - name: Grant permission
         run: chmod +x V2rayNG/gradlew
 
       - name: Build APK
@@ -31,5 +35,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: v2rayNG-release
+          name: MyVPN
           path: V2rayNG/app/build/outputs/apk/release/*.apk
